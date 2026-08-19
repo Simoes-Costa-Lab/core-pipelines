@@ -18,6 +18,10 @@ SAMPLE_ID=("HH4_anterior_ectoderm_RNA_1")
 # ==== GENOME SPECS ====
 ## DO NOT CHANGE THIS!
 case "$GENOME" in
+  galgal7)
+    GENOME_INDEX="/Data/GENOMES/GallusGallus/galgal7/hisat2_index_main/galgal7"
+    ANNOTATION="/Data/GENOMES/GallusGallus/galgal7/galgal7.mainchr.gtf"
+    ;;
   galgal6)
     GENOME_INDEX="/Data/GENOMES/GallusGallus/galgal6/hisat2_index/galgal6"
     ANNOTATION="/Data/GENOMES/GallusGallus/galgal6/galGal6.ncbiRefSeq.gtf"
@@ -31,7 +35,7 @@ case "$GENOME" in
     ANNOTATION="/Data/GENOMES/MusMusculus/mm39/gencode.vM38.annotation.gtf"
     ;;
   *)
-    echo "Error: Unknown genome '$GENOME'. Choose from {galgal6, hg38, mm39}."
+    echo "Error: Unknown genome '$GENOME'. Choose from {galgal7, galgal6, hg38, mm39}."
     exit 1
     ;;
 esac
@@ -93,6 +97,7 @@ while IFS=";" read -r F1 F2; do
     REPORT="$STATS_DIR/$(basename "$F1" .fastq.gz)_cutadapt_report.txt"
     cutadapt \
         -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC \
+	-A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
         --minimum-length=25 -j "$THREADS" \
         -o "$TRIM_DIR/trimmed_${F1}" -p "$TRIM_DIR/trimmed_${F2}" \
         "$FASTQ_DIR/$F1" "$FASTQ_DIR/$F2" > "$REPORT"
